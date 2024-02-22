@@ -3,8 +3,13 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/ikennarichard/go-crud-app/controllers"
+	"github.com/ikennarichard/go-crud-app/initializers"
 	_ "github.com/joho/godotenv/autoload"
 )
+
+func init() {
+	initializers.ConnectDB()
+}
 
 func main() {
 	// Gin

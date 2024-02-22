@@ -5,9 +5,12 @@ import (
 	"github.com/ikennarichard/go-crud-app/models"
 )
 
+func init() {
+	initializers.ConnectDB()
+}
+
 func main() {
 	
 	// migrate the schema
-	initializers.ConnectDB()
 	initializers.DB.AutoMigrate(&models.Employee{})
 }
