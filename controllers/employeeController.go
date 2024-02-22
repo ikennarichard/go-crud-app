@@ -9,15 +9,13 @@ import (
 	"github.com/ikennarichard/go-crud-app/models"
 )
 
-var employees []models.Employee
-
 func CreateEmployee(c *gin.Context) {
 	var employee models.Employee
 
 	var body struct {
 		// this is the request body
-		Name  string `json:"title"`
-		Email string `json:"artist"`
+		Name  string `json:"name"`
+		Email string `json:"email"`
 	}
 
 	// bind data to context to save it
@@ -33,9 +31,13 @@ func CreateEmployee(c *gin.Context) {
 		log.Fatal("Error creating new employee")
 	}
 
+	c.JSON(http.StatusCreated, employee)
+
 }
 
 func GetEmployees(c *gin.Context) {
+	var employees []models.Employee
+	
 	initializers.DB.Find(&employees)
 	c.JSON(http.StatusOK, employees)
 }
