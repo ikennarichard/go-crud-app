@@ -2,16 +2,17 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/ikennarichard/go-crud-app/controllers"
 	_ "github.com/joho/godotenv/autoload"
-	// "net/http"
 )
 
 func main() {
-	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "A basic crud app in Go",
-		})
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	// Gin
+	router := gin.Default()
+
+	router.POST("/employee", controllers.CreateEmployee)
+	router.GET("/employees", controllers.GetEmployees)
+	// router.GET("/employee/:id", controllers.GetEmployeeByID)
+	
+	router.Run() // listen and serve on 0.0.0.0:5000
 }
