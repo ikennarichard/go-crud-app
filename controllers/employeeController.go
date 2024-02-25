@@ -29,6 +29,7 @@ func CreateEmployee(c *gin.Context) {
 	// check for errors
 	if result.Error != nil {
 		log.Fatal("Error creating new employee")
+		c.JSON(http.StatusConflict, gin.H{"error": "Error creating employee"})
 	}
 
 	c.JSON(http.StatusCreated, employee)
@@ -42,16 +43,47 @@ func GetEmployees(c *gin.Context) {
 	c.JSON(http.StatusOK, employees)
 }
 
-// func GetEmployeeByID(c *gin.Context) {
-// 	id := c.Param("id")
+func GetEmployeeByID(c *gin.Context) {
+	var employee models.Employee
+	id := c.Param("id")
 
-// 	// loop over the albums and find the
-// 	// one that the param
-// 	for _, a:= range employees {
-// 		if a.ID == id {
-// 			c.JSON(http.StatusOK, a)
-// 			return
-// 		}
-// 	}
-// 	c.JSON(http.StatusNotFound, gin.H{"message": "Album not found"})
-// }
+	// loop over the employees and find the
+	// one that the param
+	if err := initializers.DB.First(&employee, id).Error; err != nil {
+    // Handle the case where the record was not found
+    c.JSON(http.StatusNotFound, gin.H{"error": "Employee not found"})
+    return
+	}
+	c.JSON(http.StatusOK, employee)
+}
+
+
+func DeleteEmployee(c *gin.Context) {
+	var employee models.Employee
+	id := c.Param("id")
+
+	// Delete the employee record
+	result := initializers.DB.Delete(&employee, id)
+	if result.RowsAffected == 0 {
+			// Handle the case where the record was not found
+			c.JSON(http.StatusNotFound, gin.H{"error": "Employee not found"})
+			return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Employee deleted successfully"})
+} 
+
+
+func UpdateEmployee(c *gin.Context) {
+	var employee models.Employee
+
+	var body struct {
+		Name string
+	}
+
+	c.Bind(&body)
+	id := c.Param("id")
+	initializers.DB.First(&employee, id)
+
+	initializers.DB.Model(&employee).Update("name", body.Name)
+	c.JSON(http.StatusOK, employee)
+}
