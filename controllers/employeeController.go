@@ -39,7 +39,7 @@ func CreateEmployee(c *gin.Context) {
 func GetEmployees(c *gin.Context) {
 	var employees []models.Employee
 	
-	initializers.DB.Find(&employees)
+	initializers.DB.Limit(10).Find(&employees)
 	c.JSON(http.StatusOK, employees)
 }
 
