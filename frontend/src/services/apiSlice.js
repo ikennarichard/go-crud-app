@@ -27,8 +27,21 @@ export const apiSlice = createApi({
       }),
       invalidatesTags:['Employee']
     }),
+
+    updateEmployee: builder.mutation({
+      query: employee => ({
+        url: '/employee',
+        method: 'PUT',
+        body: employee
+      }),
+      invalidatesTags:['Employee']
+    }),
   }),
 
 })
 
-export const { useGetEmployeesQuery, useDeleteEmployeeMutation, useAddEmployeeMutation } = apiSlice
+export const { 
+  useGetEmployeesQuery, 
+  useDeleteEmployeeMutation, 
+  useAddEmployeeMutation, 
+  useUpdateEmployeeMutation } = apiSlice
